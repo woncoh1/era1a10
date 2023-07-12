@@ -75,7 +75,7 @@ class SkipBlock(nn.Module):
 
 
 class PageNet(nn.Module):
-    "Optimized ResNet from https://github.com/davidcpage/cifar10-fast"
+    "ResNet optimized for training speed (adopted from https://github.com/davidcpage/cifar10-fast)"
     def __init__(self) -> None:
         super().__init__()
         self.conv0 = prepblock(3, 64)
