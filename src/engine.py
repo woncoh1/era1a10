@@ -6,6 +6,7 @@ def count_correct_predictions(
     predictions:torch.Tensor,
     labels:torch.Tensor,
 ) -> int:
+    "Count how many predictions match corresponding labels."
     return predictions.argmax(dim=1).eq(labels).sum().item()
 
 
@@ -19,6 +20,7 @@ def train_step(
     epoch:int,
     onecyclelr:bool,
 ) -> tuple[float, float]:
+    "Update weights and compute average training loss and accuracy for one epoch."
     model.train()
     train_loss = 0
     correct = 0
@@ -61,6 +63,7 @@ def test_step(
     model:torch.nn.Module,
     criterion:torch.nn.functional,
 ) -> tuple[float, float]:
+    "Compute average test loss and accuracy for one epoch."
     model.eval()
     test_loss = 0
     correct = 0
@@ -93,6 +96,7 @@ def train(
     epochs:int,
     onecyclelr:bool=True,
 ) -> dict[str, list[float]]:
+    "Train and test for given epochs and return the results."
     results = {
         'train_loss': [],
         'train_acc': [],
