@@ -25,6 +25,9 @@ CLASSES = [ # Class labels (list index = class value)
 
 
 class TransformedDataset(torch.utils.data.Dataset):
+    "Pytorch dataset + custom data augmentation (image transformation)"
+    # https://github.com/parrotletml/era_session_seven/blob/main/mnist/dataset.py
+    # https://albumentations.ai/docs/examples/migrating_from_torchvision_to_albumentations/
     def __init__(self,
         dataset:torchvision.datasets,
         transform:A.Compose|None=None,
@@ -48,6 +51,7 @@ def get_transform(
     crop:int=32, # size of cropping in pixels
     cutout:int=8, # size of cutout box in pixels
 ) -> dict[str, A.Compose]:
+    "Create image transformation pipeline for training and test datasets."
      return {
         'train': A.Compose([
             A.Normalize(mean=AVG, std=STD, always_apply=True), # Cutout boxes should be grey, not black
@@ -71,6 +75,7 @@ def get_transform(
 def get_dataset(
     transform:dict[str, A.Compose],
 ) -> dict[str, TransformedDataset]:
+    "Create training and test datasets and apply transforms."
     return {
         'train': TransformedDataset(
             dataset=torchvision.datasets.CIFAR10('../data', train=True, download=True),
@@ -87,6 +92,7 @@ def get_dataloader(
     dataset:TransformedDataset,
     params:dict[str, bool|int],
 ) -> dict[str, torch.utils.data.DataLoader]:
+    "Create training and test dataloader."
     return {
         'train': torch.utils.data.DataLoader(dataset['train'], **params),
         'test': torch.utils.data.DataLoader(dataset['test'], **params),
