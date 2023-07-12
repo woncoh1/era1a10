@@ -1,0 +1,93 @@
+import torch
+import torchvision
+import numpy as np
+import albumentations as A
+from albumentations.pytorch import ToTensorV2
+
+
+# Pixel statistics of all (train + test) CIFAR-10 images
+# https://github.com/kuangliu/pytorch-cifar/blob/master/main.py
+AVG = (0.4914, 0.4822, 0.4465) # Mean
+STD = (0.2023, 0.1994, 0.2010) # Standard deviation
+CHW = (3, 32, 32) # Channel, height, width
+CLASSES = [ # Class labels (list index = class value)
+    'airplane',
+    'automobile',
+    'bird',
+    'cat',
+    'deer',
+    'dog',
+    'frog',
+    'horse',
+    'ship',
+    'truck',
+]
+
+
+class TransformedDataset(torch.utils.data.Dataset):
+    def __init__(self,
+        dataset:torchvision.datasets,
+        transform:A.Compose|None=None,
+    ) -> None:
+        self.dataset = dataset
+        self.transform = transform
+
+    def __len__(self) -> int:
+        return len(self.dataset)
+
+    def __getitem__(self, idx:int) -> tuple[torch.Tensor, int]:
+        image, label = self.dataset[idx]
+        image = np.array(image)
+        if self.transform is not None:
+            image = self.transform(image=image)['image']
+        return image, label
+
+
+def get_transform(
+    padding:int=4, # size of padding before cropping in pixels
+    crop:int=32, # size of cropping in pixels
+    cutout:int=8, # size of cutout box in pixels
+) -> dict[str, A.Compose]:
+     return {
+        'train': A.Compose([
+            A.Normalize(mean=AVG, std=STD, always_apply=True), # Cutout boxes should be grey, not black
+            A.PadIfNeeded(min_height=padding, min_width=padding, always_apply=True), # Pad before cropping to achieve translation
+            A.RandomCrop(height=crop, width=crop, always_apply=True),
+            A.HorizontalFlip(),
+            A.CoarseDropout( # Cutout
+                max_holes=1, max_height=cutout, max_width=cutout,
+                min_holes=1, min_height=cutout, min_width=cutout,
+                fill_value=AVG,
+            ),
+            ToTensorV2(),
+        ]),
+        'test': A.Compose([
+            A.Normalize(mean=AVG, std=STD, always_apply=True),
+            ToTensorV2(),
+        ]),
+    }
+
+
+def get_dataset(
+    transform:dict[str, A.Compose],
+) -> dict[str, TransformedDataset]:
+    return {
+        'train': TransformedDataset(
+            dataset=torchvision.datasets.CIFAR10('../data', train=True, download=True),
+            transform=transform['train'],
+        ),
+        'test': TransformedDataset(
+            dataset=torchvision.datasets.CIFAR10('../data', train=False, download=False),
+            transform=transform['test'],
+        ),
+    }
+
+
+def get_dataloader(
+    dataset:TransformedDataset,
+    params:dict[str, bool|int],
+) -> dict[str, torch.utils.data.DataLoader]:
+    return {
+        'train': torch.utils.data.DataLoader(dataset['train'], **params),
+        'test': torch.utils.data.DataLoader(dataset['test'], **params),
+    }
