@@ -25,9 +25,11 @@ CLASSES = [ # Class labels (list index = class value)
 
 
 class TransformedDataset(torch.utils.data.Dataset):
-    "Pytorch dataset + custom data augmentation (image transformation)"
-    # https://github.com/parrotletml/era_session_seven/blob/main/mnist/dataset.py
-    # https://albumentations.ai/docs/examples/migrating_from_torchvision_to_albumentations/
+    """Pytorch dataset + custom data augmentation (image transformation)
+    
+    https://github.com/parrotletml/era_session_seven/blob/main/mnist/dataset.py
+    https://albumentations.ai/docs/examples/migrating_from_torchvision_to_albumentations/
+    """
     def __init__(self,
         dataset:torchvision.datasets,
         transform:A.Compose|None=None,
@@ -52,7 +54,7 @@ def get_transform(
     cutout:int=8, # size of cutout box in pixels
 ) -> dict[str, A.Compose]:
     "Create image transformation pipeline for training and test datasets."
-     return {
+    return {
         'train': A.Compose([
             A.Normalize(mean=AVG, std=STD, always_apply=True), # Cutout boxes should be grey, not black
             A.PadIfNeeded(min_height=padding, min_width=padding, always_apply=True), # Pad before cropping to achieve translation
