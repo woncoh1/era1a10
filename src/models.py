@@ -46,7 +46,7 @@ def predblock( # Prediction block
     i:int, # in_channels
     o:int, # out_channels
 ) -> nn.Sequential:
-    "Use max pooling and 1x1 convolution to compute logit for loss function"
+    "Use max pooling and 1x1 convolution to compute logit for loss function."
     return nn.Sequential(
         # [-1, i, s, s]
         nn.MaxPool2d(4),
@@ -75,7 +75,9 @@ class SkipBlock(nn.Module):
 
 
 class PageNet(nn.Module):
-    "ResNet optimized for training speed (adopted from https://github.com/davidcpage/cifar10-fast)"
+    """ResNet optimized for training speed
+    https://github.com/davidcpage/cifar10-fast
+    """
     def __init__(self) -> None:
         super().__init__()
         self.conv0 = prepblock(3, 64)

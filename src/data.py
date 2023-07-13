@@ -26,7 +26,6 @@ CLASSES = [ # Class labels (list index = class value)
 
 class TransformedDataset(torch.utils.data.Dataset):
     """Pytorch dataset + custom data augmentation (image transformation)
-    
     https://github.com/parrotletml/era_session_seven/blob/main/mnist/dataset.py
     https://albumentations.ai/docs/examples/migrating_from_torchvision_to_albumentations/
     """
@@ -53,7 +52,10 @@ def get_transform(
     crop:int=32, # size of cropping in pixels
     cutout:int=8, # size of cutout box in pixels
 ) -> dict[str, A.Compose]:
-    "Create image transformation pipeline for training and test datasets."
+    """Create image transformation pipeline for training and test datasets.
+    https://github.com/kuangliu/pytorch-cifar/blob/master/main.py#L30-L34
+    https://github.com/davidcpage/cifar10-fast/blob/master/core.py#L98
+    """
     return {
         'train': A.Compose([
             A.Normalize(mean=AVG, std=STD, always_apply=True), # Cutout boxes should be grey, not black
