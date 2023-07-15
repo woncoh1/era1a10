@@ -7,11 +7,11 @@ from albumentations.pytorch import ToTensorV2
 
 # Pixel statistics of all (train + test) CIFAR-10 images
 # https://github.com/kuangliu/pytorch-cifar/blob/master/main.py
-# AVG = (0.4914, 0.4822, 0.4465) # Mean (normalization after standardization)
-# STD = (0.2023, 0.1994, 0.2010) # Standard deviation (normalization after standardization)
+AVG = (0.4914, 0.4822, 0.4465) # Mean
+STD = (0.2023, 0.1994, 0.2010) # Standard deviation
 # https://github.com/davidcpage/cifar10-fast/blob/master/torch_backend.py#L55
-AVG = (125.31, 122.95, 113.87) # Mean
-STD = (62.99, 62.09, 66.70) # Standard deviation
+# AVG = (125.31, 122.95, 113.87) # Mean
+# STD = (62.99, 62.09, 66.70) # Standard deviation
 CHW = (3, 32, 32) # Channel, height, width
 CLASSES = [ # Class labels (list index = class value)
     'airplane',
