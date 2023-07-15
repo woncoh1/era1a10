@@ -14,7 +14,7 @@ def train_step(
     device:torch.device,
     loader:torch.utils.data.DataLoader,
     model:torch.nn.Module,
-    criterion:torch.nn.functional,
+    criterion:torch.nn.Module,
     optimizer:torch.optim.Optimizer,
     scheduler:torch.optim.lr_scheduler.LRScheduler,
     epoch:int,
@@ -61,7 +61,7 @@ def test_step(
     device:torch.device,
     loader:torch.utils.data.DataLoader,
     model:torch.nn.Module,
-    criterion:torch.nn.functional,
+    criterion:torch.nn.Module,
 ) -> tuple[float, float]:
     "Compute average test loss and accuracy for one epoch."
     model.eval()
@@ -90,7 +90,7 @@ def train(
     train_loader:torch.utils.data.DataLoader,
     test_loader:torch.utils.data.DataLoader,
     model:torch.nn.Module,
-    criterion:torch.nn.functional,
+    criterion:torch.nn.Module,
     optimizer:torch.optim.Optimizer,
     scheduler:torch.optim.lr_scheduler.LRScheduler,
     epochs:int,
