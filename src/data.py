@@ -66,7 +66,7 @@ def get_transform(
             A.CoarseDropout( # Cutout
                 max_holes=1, max_height=cutout, max_width=cutout,
                 min_holes=1, min_height=cutout, min_width=cutout,
-                fill_value=AVG,
+                fill_value=AVG, always_apply=True,
             ),
             ToTensorV2(),
         ]),
