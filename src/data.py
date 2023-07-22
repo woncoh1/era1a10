@@ -65,11 +65,11 @@ def get_transform(
             A.Normalize(mean=AVG, std=STD, always_apply=True), # Cutout boxes should be grey, not black
             A.PadIfNeeded(min_height=padding, min_width=padding, always_apply=True), # Pad before cropping to achieve translation
             A.RandomCrop(height=crop, width=crop, always_apply=True),
-            A.HorizontalFlip(p=1),
+            A.HorizontalFlip(),
             A.CoarseDropout( # Cutout
                 max_holes=1, max_height=cutout, max_width=cutout,
                 min_holes=1, min_height=cutout, min_width=cutout,
-                fill_value=AVG, p=0.8
+                fill_value=AVG
             ),
             ToTensorV2(),
         ]),
