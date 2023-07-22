@@ -2,6 +2,9 @@ import torch
 import torch.nn as nn
 
 
+DROPOUT = 0.1
+
+
 def prepblock( # Preparation block
     i:int, # in_channels
     o:int, # out_channels
@@ -10,7 +13,7 @@ def prepblock( # Preparation block
     return nn.Sequential(
         nn.Conv2d(i, o, 3, padding=1, padding_mode='replicate', bias=False),
         nn.BatchNorm2d(o),
-        nn.Dropout(p=0.05),
+        nn.Dropout(p=DROPOUT),
         nn.ReLU(),
     )
 
@@ -24,7 +27,7 @@ def convblock( # Convolution block
         nn.Conv2d(i, o, 3, padding=1, padding_mode='replicate', bias=False),
         nn.MaxPool2d(2, stride=2),
         nn.BatchNorm2d(o),
-        nn.Dropout(p=0.05),
+        nn.Dropout(p=DROPOUT),
         nn.ReLU(),
     )
 
@@ -37,11 +40,11 @@ def resblock( # Residual block
     return nn.Sequential(
         nn.Conv2d(i, o, 3, padding=1, padding_mode='replicate', bias=False),
         nn.BatchNorm2d(o),
-        nn.Dropout(p=0.05),
+        nn.Dropout(p=DROPOUT),
         nn.ReLU(),
         nn.Conv2d(o, o, 3, padding=1, padding_mode='replicate', bias=False),
         nn.BatchNorm2d(o),
-        nn.Dropout(p=0.05),
+        nn.Dropout(p=DROPOUT),
         nn.ReLU(),
     )
 
