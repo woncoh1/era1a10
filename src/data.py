@@ -6,15 +6,15 @@ from albumentations.pytorch import ToTensorV2
 
 
 # Pixel statistics of all (train + test) CIFAR-10 images
-# https://github.com/darshanvjani/torchcraft/blob/main/utils/helper.py#L55
-AVG = (0.49139968, 0.48215841, 0.44653091) # Mean
-STD = (0.24703223, 0.24348513, 0.26158784) # Standard deviation
 # https://github.com/kuangliu/pytorch-cifar/blob/master/main.py
-# AVG = (0.4914, 0.4822, 0.4465) # Mean
-# STD = (0.2023, 0.1994, 0.2010) # Standard deviation
+AVG = (0.4914, 0.4822, 0.4465) # Mean
+STD = (0.2023, 0.1994, 0.2010) # Standard deviation
 # https://github.com/davidcpage/cifar10-fast/blob/master/torch_backend.py#L55
 # AVG = (125.31, 122.95, 113.87) # Mean
 # STD = (62.99, 62.09, 66.70) # Standard deviation
+# # https://github.com/darshanvjani/torchcraft/blob/main/utils/helper.py#L55
+# AVG = (0.49139968, 0.48215841, 0.44653091) # Mean
+# STD = (0.24703223, 0.24348513, 0.26158784) # Standard deviation
 CHW = (3, 32, 32) # Channel, height, width
 CLASSES = [ # Class labels (list index = class value)
     'airplane',
@@ -65,11 +65,11 @@ def get_transform(
             A.Normalize(mean=AVG, std=STD, always_apply=True), # Cutout boxes should be grey, not black
             A.PadIfNeeded(min_height=padding, min_width=padding, always_apply=True), # Pad before cropping to achieve translation
             A.RandomCrop(height=crop, width=crop, always_apply=True),
-            A.HorizontalFlip(),
+            A.HorizontalFlip(p=1),
             A.CoarseDropout( # Cutout
                 max_holes=1, max_height=cutout, max_width=cutout,
                 min_holes=1, min_height=cutout, min_width=cutout,
-                fill_value=AVG,
+                fill_value=AVG, p=0.8
             ),
             ToTensorV2(),
         ]),
