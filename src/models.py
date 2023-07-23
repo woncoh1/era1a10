@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 
-DROPOUT = 0.05
+DROPOUT = 0
 
 
 def prepblock( # Preparation block
