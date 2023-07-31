@@ -209,3 +209,4 @@ Test : Loss = 0.00044, Accuracy = 93.26%
 - [ ] Plug-in modules: easily assemble different combinations of components
 - [ ] Real-time LR viewer: print learning rate per batch or epoch
 - [ ] Hyperparameter scanner: search for new hyperparameter candidates among function parameters
+- [ ] [einops](https://github.com/arogozhnikov/einops)
